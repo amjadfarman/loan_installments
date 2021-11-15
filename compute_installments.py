@@ -41,12 +41,15 @@ class ComputeInstallments:
     def find_installments(self):
         solution = self.solve_system()
         installment = solution[-1]
+        p_total = solution[:-1].sum()
+        p_paid = 0
         for k, s in enumerate(solution[:(len(solution) - 1)]):
-            print(
-              'Installment {k}:   principal amount: {s:.1f},   interest: {interest:.1f}, total: {total:.1f}'.format(
-                k=k + 1,
-                s=s,
-                interest=installment - s,
-                total=installment
-              )
+            p_paid += s
+            p_remaining = p_total - p_paid
+            interest = installment - s
+            line_msg = (
+                f"Installment {k + 1}:   principal amount: {s:.1f},   "
+                f"interest: {interest:.1f},  principal_paid: {p_paid: .1f},  "
+                f"principal_remaining:  {p_remaining: .1f},  total: {installment:.1f}"
             )
+            print(line_msg)
